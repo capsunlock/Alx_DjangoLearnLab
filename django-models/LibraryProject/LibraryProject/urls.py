@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.generic import RedirectView # Add this import
 
 urlpatterns = [
-    # Change this line:
-    path('admin/', admin.site.urls), 
-    path('', include('relationship_app.urls')),
+    path('admin/', admin.site.urls),
+    path('', RedirectView.as_view(url='/books/')), # Redirects home to the book list
+    # ... your other paths ...
 ]

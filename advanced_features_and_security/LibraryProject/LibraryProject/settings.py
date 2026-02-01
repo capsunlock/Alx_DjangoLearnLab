@@ -49,6 +49,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # Add your app name here (assuming bookshelf)
+    'bookshelf.middleware.ContentSecurityPolicyMiddleware', 
 ]
 
 ROOT_URLCONF = 'LibraryProject.urls'
@@ -124,3 +126,20 @@ LOGIN_REDIRECT_URL = 'list_books'  # Redirect to books list after login
 LOGOUT_REDIRECT_URL = 'login'      # Redirect to login page after logout
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
+
+# Security Settings for Production
+DEBUG = False  # Set to False for production
+
+# Browser-side protections
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# HTTPS specific settings (Enforce Secure Cookies)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Content Security Policy (Optional but recommended if using django-csp)
+# To use this, you'd usually install django-csp, but for now, we can document it.
+# CSP_STYLE_SRC = ("'self'",)
+# CSP_SCRIPT_SRC = ("'self'",)

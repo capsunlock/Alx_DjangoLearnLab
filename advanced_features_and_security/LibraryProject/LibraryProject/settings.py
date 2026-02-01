@@ -123,4 +123,4 @@ STATIC_URL = 'static/'
 LOGIN_REDIRECT_URL = 'list_books'  # Redirect to books list after login
 LOGOUT_REDIRECT_URL = 'login'      # Redirect to login page after logout
 
-AUTH_USER_MODEL = 'relationship_app.CustomUser'
+AUTH_USER_MODEL = 'bookshelf.CustomUser'

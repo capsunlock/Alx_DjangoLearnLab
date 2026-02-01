@@ -1,16 +1,26 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import Author, Book, Library, Librarian, UserProfile
 
-class CustomUserAdmin(UserAdmin):
-    model = CustomUser
-    # Add your custom fields to the fieldsets so they appear in the admin "Change User" page
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('date_of_birth', 'profile_photo')}),
-    )
-    # Also add them to the "Add User" page
-    add_fieldsets = UserAdmin.add_fieldsets + (
-        (None, {'fields': ('date_of_birth', 'profile_photo')}),
-    )
+# Registering models that belong to the relationship_app
+@admin.register(Author)
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('name',)
 
-admin.site.register(CustomUser, CustomUserAdmin)
+@admin.register(Book)
+class BookAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author')
+    # The permissions are handled by the Meta class in models.py
+    # but they will appear here in the "Permissions" section of the Admin UI
+
+@admin.register(Library)
+class LibraryAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+@admin.register(Librarian)
+class LibrarianAdmin(admin.ModelAdmin):
+    list_display = ('name', 'library')
+
+@admin.register(UserProfile)
+class UserProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'role')
+    list_filter = ('role',)

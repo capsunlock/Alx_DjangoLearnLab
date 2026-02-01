@@ -143,3 +143,33 @@ SESSION_COOKIE_SECURE = True
 # To use this, you'd usually install django-csp, but for now, we can document it.
 # CSP_STYLE_SRC = ("'self'",)
 # CSP_SCRIPT_SRC = ("'self'",)
+
+# --- HTTPS and SSL Settings ---
+# Redirect all HTTP requests to HTTPS
+SECURE_SSL_REDIRECT = True
+
+# HTTP Strict Transport Security (HSTS)
+# 31536000 seconds = 1 year
+SECURE_HSTS_SECONDS = 31536000  
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+# --- Secure Cookies ---
+# Ensure cookies are only sent over HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+
+# --- Secure Headers ---
+# Prevent clickjacking
+X_FRAME_OPTIONS = 'DENY'
+# Prevent MIME-sniffing
+SECURE_CONTENT_TYPE_NOSNIFF = True
+# Enable browser XSS filter
+SECURE_BROWSER_XSS_FILTER = True
+
+# Note: Since SECURE_SSL_REDIRECT is True, you must ensure 
+# your ALLOWED_HOSTS is not empty in production.
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.herokuapp.com'] # Example domains
+
+# Tell Django to trust the X-Forwarded-Proto header coming from Nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

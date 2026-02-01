@@ -26,3 +26,15 @@ The policy is set to `default-src 'self'`, which instructs the browser to only
 load content (scripts, styles, etc.) from our own domain. 
 This is enforced via a custom middleware that adds the `Content-Security-Policy` 
 header to every outgoing HTTP response.
+
+## Security Review: HTTPS & Secure Headers
+
+### Implemented Measures:
+1. **Enforced HTTPS**: All traffic is redirected to HTTPS using `SECURE_SSL_REDIRECT`.
+2. **HSTS**: Browsers are instructed to remember the site as HTTPS-only for one year via `SECURE_HSTS_SECONDS`.
+3. **Secure Cookies**: Session and CSRF cookies are flagged as `Secure`, preventing them from being sent over unencrypted connections.
+4. **Clickjacking Protection**: `X_FRAME_OPTIONS` is set to `DENY` to prevent the site from being rendered in an iframe.
+5. **Content Sniffing**: `SECURE_CONTENT_TYPE_NOSNIFF` ensures the browser respects the server's MIME type declarations.
+
+### Improvements:
+- In the future, a more granular **Content Security Policy (CSP)** could be added to limit the sources of external scripts and styles further.

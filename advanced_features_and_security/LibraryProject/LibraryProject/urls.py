@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.views.generic import RedirectView # Add this import
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', RedirectView.as_view(url='/books/')), # Redirects home to the book list
-    # ... your other paths ...
+    path('admin/', admin.site.register),
+    # This line connects your app's URLs to the main project
+    path('', include('relationship_app.urls')), 
 ]

@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import user_passes_test
 
 # 1. Function-based view to list all books
 def list_books(request):
-    books = Book.objects.all()  # Fetch all books from the DB
-    context = {'books': books}  # Pass data to the template
-    return render(request, 'relationship_app/list_books.html', context)
+    books = Book.objects.all()  # Fetch all books from DB
+    return render(request, 'relationship_app/list_books.html', {'books': books})
 
 # 2. Class-based view for library details
 class LibraryDetailView(DetailView):

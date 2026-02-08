@@ -31,15 +31,19 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # ... django defaults ...
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # Required for the API
     'rest_framework',
     'api',
+    
+    # Add this line to fix the TemplateDoesNotExist error
+    'django_filters', 
 ]
 
 MIDDLEWARE = [

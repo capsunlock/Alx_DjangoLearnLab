@@ -1,7 +1,8 @@
 from django.shortcuts import render
+from django_filters import rest_framework
 from rest_framework import generics, permissions
 from rest_framework.filters import SearchFilter, OrderingFilter
-from django_filters.rest_framework import DjangoFilterBackend
+
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
 
 from .models import Book
@@ -18,28 +19,25 @@ Book API Views:
 
 # Listview: Retrieve all books. Accessible to everyone (Read-only).
 class BookListView(generics.ListAPIView):
-    """
-    Enhanced ListView for Books supporting:
-    - Filtering: ?title=...&author=...&publication_year=...
-    - Searching: ?search=... (matches title or author name)
-    - Ordering: ?ordering=title or ?ordering=-publication_year
-    """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
     
-    # Define backends
-    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter] #
-    
-    # Configuration for Filtering (exact matches)
-    filterset_fields = ['title', 'author', 'publication_year'] #
-    
-    # Configuration for Search (partial text matches)
-    search_fields = ['title', 'author__name'] #
-    
-    # Configuration for Ordering
-    ordering_fields = ['title', 'publication_year'] #
-    ordering = ['title']  # Default ordering
+    # Task: Integrate DRF's filtering, searching, and ordering backends
+    filter_backends = [
+        rest_framework.DjangoFilterBackend, 
+        SearchFilter, 
+        OrderingFilter
+    ]
+
+    # Task: Filter by title, author, and publication_year
+    filterset_fields = ['title', 'author', 'publication_year']
+
+    # Task: Enable search on title and author (spanning relationship to name)
+    search_fields = ['title', 'author__name']
+
+    # Task: Configure Ordering for title and publication_year
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['title'] # Default ordering
 
 # DetailView: Retrieve a single book. Accessible to everyone.
 class BookDetailView(generics.RetrieveAPIView):

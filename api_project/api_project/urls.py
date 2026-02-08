@@ -14,12 +14,13 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# api_project/urls.py
+# api_project/api_project/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
-    path('admin/', admin.as_view()),
-    # Include the api app URLs with an 'api/' prefix
-    path('api/', include('api.urls')),
+    path('admin/', admin.site.urls),
+    path('api/', include('api.urls')), # This points to your app's urls
+    path('api-token-auth/', obtain_auth_token), # THIS is what your curl needs
 ]

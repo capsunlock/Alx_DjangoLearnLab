@@ -18,11 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    # Change 'view' to 'urls'
-    path('admin/', admin.site.urls), 
-    
-    path('api/', include('api.urls')),
-    
-    # This enables the "Log in" button in the top right of your browser
-    path('api-auth/', include('rest_framework.urls')), 
+    path('admin/', admin.site.urls), # Fixed from 'view' to 'urls'
+    path('api/', include('api.urls')), # This connects your Book views
+    path('api-auth/', include('rest_framework.urls')), # This enables the login button
 ]

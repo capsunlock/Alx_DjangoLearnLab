@@ -1,16 +1,27 @@
-from rest_framework import generics
-from rest_framework.authtoken.models import Token
+from rest_framework import generics, permissions
 from rest_framework.response import Response
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from .serializers import UserSerializer
-from .models import CustomUser
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class RegisterView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class LoginView(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        # Grab the user and create/return the token
-        user = CustomUser.objects.get(username=request.data['username'])
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
         token, created = Token.objects.get_or_create(user=user)
-        return Response({'token': token.key, 'user_id': user.pk, 'username': user.username})
+        return Response({'token': token.key})
+
+class ProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user

@@ -56,7 +56,7 @@ ROOT_URLCONF = 'django_blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'blog/templates'],
+        'DIRS': [BASE_DIR / 'blog' / 'templates'], # Crucial line
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,11 +122,16 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
+# Static files (CSS, JavaScript, Images) - https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'blog' / 'static']
+# This tells Django where to look for static files during development
+STATICFILES_DIRS = [
+    BASE_DIR / "blog" / "static",
+]
 
-LOGIN_REDIRECT_URL = 'home'
-LOGOUT_REDIRECT_URL = 'login'
+# This tells LoginRequiredMixin where to send users who aren't logged in
+LOGIN_URL = 'login'
+
+# This tells Django where to send users after they successfully log in
+LOGIN_REDIRECT_URL = 'blog-home'

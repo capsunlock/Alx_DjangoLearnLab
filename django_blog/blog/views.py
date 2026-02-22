@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse_lazy
 from django.views.generic import (
     ListView, 
     DetailView, 
@@ -49,33 +50,31 @@ def profile(request):
 
 # --- Blog Post CRUD Views (Class-Based) ---
 
-
-
 class PostListView(ListView):
-    """Accessible to all users. Lists all posts."""
+    """Lists all blog posts on the home page."""
     model = Post
     template_name = 'blog/post_list.html'
     context_object_name = 'posts'
     ordering = ['-published_date']
 
 class PostDetailView(DetailView):
-    """Accessible to all users. Shows a single post."""
+    """Displays a single blog post."""
     model = Post
     template_name = 'blog/post_detail.html'
 
 class PostCreateView(LoginRequiredMixin, CreateView):
-    """Only authenticated users can create posts."""
+    """Allows logged-in users to create a post."""
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
 
     def form_valid(self, form):
-        # Automatically set the author to the currently logged-in user
+        # Assign the current user as the author of the post
         form.instance.author = self.request.user
         return super().form_valid(form)
 
 class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    """Only the author can update their own post."""
+    """Allows authors to update their own posts."""
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
@@ -85,16 +84,17 @@ class PostUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
         return super().form_valid(form)
 
     def test_func(self):
-        # UserPassesTestMixin uses this to check if user has permission
+        # Verification: Only the author can edit
         post = self.get_object()
         return self.request.user == post.author
 
 class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    """Only the author can delete their own post."""
+    """Allows authors to delete their own posts."""
     model = Post
     template_name = 'blog/post_confirm_delete.html'
-    success_url = '/' # Redirect home after deletion
+    success_url = reverse_lazy('blog-home')
 
     def test_func(self):
+        # Verification: Only the author can delete
         post = self.get_object()
         return self.request.user == post.author

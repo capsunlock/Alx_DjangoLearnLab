@@ -26,15 +26,27 @@ class ProfileUpdateForm(forms.ModelForm):
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
+        # We only want the user to type the content.
+        # The 'post' and 'author' will be handled automatically by our views.
         fields = ['content']
-        # Adding widgets allows me to customize the HTML appearance
+        
+        # Adding some styling and a placeholder using widgets
         widgets = {
             'content': forms.Textarea(attrs={
-                'class': 'form-control', 
-                'placeholder': 'Write a comment...',
-                'rows': 3
+                'class': 'form-control',
+                'placeholder': 'Write your comment here...',
+                'rows': 4,
             }),
         }
+
+    def clean_content(self):
+        """
+        Custom validation to ensure comments aren't just whitespace or too short.
+        """
+        content = self.cleaned_data.get('content')
+        if not content or len(content.strip()) < 2:
+            raise forms.ValidationError("Your comment is a bit too short!")
+        return content
 
 class PostForm(forms.ModelForm):
     class Meta:

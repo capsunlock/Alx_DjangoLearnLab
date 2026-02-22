@@ -32,21 +32,27 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
     
 class Comment(models.Model):
-    # Linking the comment to a specific post. 
-    # related_name='comments' allows us to access comments from a post object (e.g., post.comments.all())
+    # Establishing Many-to-One relationship with Post
     post = models.ForeignKey('Post', on_delete=models.CASCADE, related_name='comments')
     
-    # Linking to the user who wrote it
+    # Establishing relationship with User (the author of the comment)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     
+    # The text content of the comment
     content = models.TextField()
     
-    # Timestamps
-    created_at = models.DateTimeField(default=timezone.now)
+    # Automatically set the time when the comment is first created
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Automatically update the time every time the comment is saved
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
+
+    def get_absolute_url(self):
+        # After editing a comment, redirect back to the post detail page
+        return reverse('post-detail', kwargs={'pk': self.post.pk})
     
 @receiver(post_save, sender=User)
 def create_profile(sender, instance, created, **kwargs):

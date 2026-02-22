@@ -1,0 +1,18 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<div class="content-section">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">
+                {% if object %} Update Comment {% else %} Add Comment {% endif %}
+            </legend>
+            {{ form.as_p }}
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-info" type="submit">Post Comment</button>
+            <a class="btn btn-outline-secondary" href="{% url 'post-detail' object.post.id|default:view.kwargs.pk %}">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PostViewSet, CommentViewSet
+from .views import PostViewSet, CommentViewSet, PostFeedView
 
 # Initialize the router
 router = DefaultRouter()
@@ -13,5 +13,7 @@ router.register(r'comments', CommentViewSet)
 
 # The router.urls property contains all the auto-generated URL patterns
 urlpatterns = [
+    # New Feed Route
+    path('feed/', PostFeedView.as_view(), name='post_feed'),
     path('', include(router.urls)),
 ]

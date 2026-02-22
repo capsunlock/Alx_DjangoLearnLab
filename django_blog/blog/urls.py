@@ -12,9 +12,9 @@ from .views import (
 urlpatterns = [
     # Blog Post CRUD URLs
     path('', PostListView.as_view(), name='blog-home'),
-    path('posts/', PostListView.as_view(), name='posts'), 
-    path('posts/new/', PostCreateView.as_view(), name='post-create'),
-    path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
+    path('post/', PostListView.as_view(), name='post'), 
+    path('post/new/', PostCreateView.as_view(), name='post-create'),
+    path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail'),
     
     # Requirement: URLs containing "post/<int:pk>/delete/" and "post/<int:pk>/update/"
     path('post/<int:pk>/update/', PostUpdateView.as_view(), name='post-update'),

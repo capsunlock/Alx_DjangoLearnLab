@@ -25,3 +25,16 @@ class Comment(models.Model):
 
     def __str__(self):
         return f'Comment by {self.author} on {self.post}'
+
+class Like(models.Model):
+    # Link to the user who liked the post
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_likes')
+    # Link to the post being liked
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='post_likes')
+
+    class Meta:
+        # Prevents a user from liking the same post more than once
+        unique_together = ('user', 'post')
+
+    def __str__(self):
+        return f"{self.user.username} liked {self.post.title}"
